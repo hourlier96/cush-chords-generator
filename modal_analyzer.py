@@ -11,7 +11,7 @@ from utils import (
 from constants import MODES_DATA, ROMAN_DEGREES
 
 
-def detect_intelligent_mode(progression):
+def detect_intelligent_mode(progression, tonic=None):
     """
     Detects the most probable mode of a chord progression.
     Returns the tonic index and the mode name.
@@ -102,25 +102,42 @@ def detect_intelligent_mode(progression):
                 perfect_matches.append(
                     {"tonic": tonic_idx, "mode": mode_name, "score": score}
                 )
+    # If a tonic is provided, we return the first match
+    if tonic:
+        tonic_index = get_note_index(tonic)
+        for match in perfect_matches:
+            if match["tonic"] == tonic_index:
+                return match["tonic"], match["mode"]
+
     # for match in perfect_matches:
     #     print(
     #         f"Match: Tonic {get_note_from_index(match['tonic'])}, Mode {match['mode']}, Score {match['score']}"
     #     )
     if not perfect_matches:
-        return get_note_index(progression[0]), "Ionian"
+        print("No mode found, can't give any substitution.")
+        exit(1)
 
     # Sort by descending score
     best_match = sorted(perfect_matches, key=lambda m: -m["score"])[0]
     return best_match["tonic"], best_match["mode"]
 
 
-def create_substitution_table(base_progression):
+def create_substitution_table(base_progression, tonic=None):
+    if tonic and tonic not in base_progression:
+        print(
+            f"Warning: Tonic '{tonic}' not found in the progression. Using default tonic '{base_progression[0]}'."
+        )
+        tonic = None
+
     if not base_progression or len(base_progression) < 2:
         print("The progression is empty or too short.")
         return
 
     # Use the new intelligent detector
-    detected_tonic_index, original_mode = detect_intelligent_mode(base_progression)
+    detected_tonic_index, original_mode = detect_intelligent_mode(
+        base_progression, tonic
+    )
+    print("\nTonic:", tonic if tonic else base_progression[0])
     tonic_name = get_note_from_index(detected_tonic_index)
 
     # Try to find the exact tonic chord in the progression
@@ -129,7 +146,7 @@ def create_substitution_table(base_progression):
         tonic_name,
     )
 
-    print(f"\nAnalyzing progression '{' -> '.join(base_progression)}'...")
+    print(f"Analyzing progression '{' -> '.join(base_progression)}'")
     print(f"Most probable mode : {tonic_name} {original_mode}")
 
     # Logic to extract degrees to substitute
@@ -203,17 +220,13 @@ def create_substitution_table(base_progression):
 
 if __name__ == "__main__":
     # Ionian
-    diatonic_progression = ["C", "G", "Am", "F"]
-    create_substitution_table(diatonic_progression)
-
-    # Aeolian
-    diatonic_progression = ["Cm", "D#", "G#", "A#"]
+    diatonic_progression = ["Cm", "D°", "Eb"]
     create_substitution_table(diatonic_progression)
 
     # Mixolydian
-    diatonic_progression = ["D", "C", "G", "Am"]
-    create_substitution_table(diatonic_progression)
+    diatonic_progression = ["Cm", "D#", "G#", "A#"]
+    create_substitution_table(diatonic_progression, tonic="A#")
 
-    # Lydian
-    diatonic_prog = ["Cmaj7", "Em7", "Bm7", "F#m7b5"]
-    create_substitution_table(diatonic_prog)
+    # # Lydian
+    diatonic_progression = ["D", "C", "G", "Am"]
+    create_substitution_table(diatonic_progression, tonic="C")
