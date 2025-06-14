@@ -4,9 +4,6 @@ Heavily inspired from [Cush chords game from Open Studio](https://www.youtube.co
 
 This analyzer takes a diatonic chord progression, and provide all available substitutions in all existing major modes.
 
-Example:
-
-I-V-vi-IV
 
 ## Installation
 
@@ -18,17 +15,24 @@ Install requirements.txt depdencies first with:
 pip install -r requirements.txt
 ```
 
+## Run
+
 ```python
 python3 modal_analyzer.py
 ```
 
-You can try to pass a not diatonic chord progression, but the original mode detection could fail since it needs obvious rules to be find.
+<img width="621" alt="image" src="https://github.com/user-attachments/assets/609e6d07-a3f2-457c-ac3a-c5ebaf044663" />
+
+
+To enable the mode to be clearly detected, the chord progression provided must be diatonic.
+
+Tonic can be specified manually as parameter
 
 ## Tests
 
 Mode detection has been tested across multiple diatonic chords progressions.
 
-For ambiguous chords progressions, chords with I as first is preferred.
+For ambiguous chords progressions, first chords is considered as first degree (I)
 
 ```bash
 pytest -vs
