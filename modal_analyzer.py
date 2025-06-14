@@ -216,17 +216,3 @@ def create_substitution_table(base_progression, tonic=None):
         table_data.append(row)
 
     print(tabulate(table_data, headers=headers, tablefmt="grid"))
-
-
-if __name__ == "__main__":
-    # Ionian
-    diatonic_progression = ["Cm", "D°", "Eb"]
-    create_substitution_table(diatonic_progression)
-
-    # Mixolydian
-    diatonic_progression = ["Cm", "D#", "G#", "A#"]
-    create_substitution_table(diatonic_progression, tonic="A#")
-
-    # # Lydian
-    diatonic_progression = ["D", "C", "G", "Am"]
-    create_substitution_table(diatonic_progression, tonic="C")
