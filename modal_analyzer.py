@@ -206,7 +206,15 @@ def create_substitution_table(base_progression, tonic=None):
             get_diatonic_7th_chord(deg, relative_tonic_index)
             for deg in degrees_to_borrow
         ]
-        new_progression = f"{tonic_chord_in_prog} - {' - '.join(borrowed_chords)}"
+        new_progression_chords = []
+        borrowed_idx = 0
+        for chord in base_progression:
+            if get_note_index(chord) == detected_tonic_index:
+                new_progression_chords.append(chord)
+            else:
+                new_progression_chords.append(borrowed_chords[borrowed_idx])
+                borrowed_idx += 1
+        new_progression = " - ".join(new_progression_chords)
         row = [
             mode_name,
             f"{get_note_from_index(relative_tonic_index)} Major",

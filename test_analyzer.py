@@ -41,7 +41,7 @@ from modal_analyzer import (
         ),
     ],
 )
-def test_01_get_diatonic_7th_chord_returns_expected_chords(
+def test_01_get_diatonic_7th_chord_expected_chords(
     tonic, mode_name, degrees, expected_chords
 ):
     chords = [get_diatonic_7th_chord(degree, tonic, mode_name) for degree in degrees]
@@ -50,7 +50,7 @@ def test_01_get_diatonic_7th_chord_returns_expected_chords(
     ), f"Chords generated {chords} != exx {expected_chords}"
 
 
-MOTIFS_CLASSIQUES = {
+TESTS_CASES = {
     "Ionian": {
         "I-ii-V-I": [1, 2, 5, 1],  # cadence II-V-I
         "I-V-vi-IV": [1, 5, 6, 4],  # axis progression
@@ -149,26 +149,21 @@ MOTIFS_CLASSIQUES = {
     },
 }
 
-# --- Generation des cas de test ---
-CAS_DE_TEST_CLASSIQUES = []
+TESTS_LIST = []
 for note in NOTES:
-    for mode_name, patterns in MOTIFS_CLASSIQUES.items():
+    for mode_name, patterns in TESTS_CASES.items():
         for pattern_name, pattern_degrees in patterns.items():
             # Creation d'un ID de test lisible pour pytest
             test_id = f"{note}-{mode_name}-{pattern_name}"
-            CAS_DE_TEST_CLASSIQUES.append(
+            TESTS_LIST.append(
                 pytest.param(
                     get_note_index(note), mode_name, pattern_degrees, id=test_id
                 )
             )
 
 
-@pytest.mark.parametrize("tonic, mode_name, pattern_degrees", CAS_DE_TEST_CLASSIQUES)
-def test_02_detection_motifs_classiques(tonic, mode_name, pattern_degrees):
-    """
-    Teste la detection sur des motifs harmoniques classiques specifiques à chaque mode.
-    Le test genère les accords à partir des degres, lance la detection, et verifie le resultat.
-    """
+@pytest.mark.parametrize("tonic, mode_name, pattern_degrees", TESTS_LIST)
+def test_02_get_mode_from_progression(tonic, mode_name, pattern_degrees):
     expected_mode = mode_name
 
     progression = [
@@ -176,9 +171,7 @@ def test_02_detection_motifs_classiques(tonic, mode_name, pattern_degrees):
         for degree in pattern_degrees
     ]
 
-    print("\nProgression calculee : ", progression)
-
-    detected_tonic_index, detected_mode = detect_intelligent_mode(progression)
+    _, detected_mode = detect_intelligent_mode(progression)
 
     progression_str = " -> ".join(progression)
 
