@@ -20,11 +20,12 @@ pip install -r requirements.txt
 python3 main.py
 ```
 
-<img width="621" alt="image" src="https://github.com/user-attachments/assets/609e6d07-a3f2-457c-ac3a-c5ebaf044663" />
+<img width="729" alt="image" src="https://github.com/user-attachments/assets/cac62c88-a182-4e94-9df7-3eae282c9277" />
+
 
 To enable the mode to be clearly detected, the chord progression provided must be diatonic.
 
-Tonic can be specified manually as parameter
+Tonic can be specified manually as parameter (when progression doesn't start with degree 'I')
 
 ## Tests
 
