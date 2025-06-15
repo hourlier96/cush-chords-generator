@@ -97,3 +97,12 @@ def is_chord_compatible(chord_quality, expected_quality):
     if chord_quality == "d" and expected_quality == "m7b5":
         return True
     return False
+
+
+def format_chords_for_table(chords, width=7):
+    if isinstance(chords, str):
+        chords_list = chords.split(" - ")
+    else:
+        chords_list = chords
+    formatted = [f"{chord:<{width}}" for chord in chords_list]
+    return " ".join(formatted)

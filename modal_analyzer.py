@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from tabulate import tabulate
 from utils import (
+    format_chords_for_table,
     get_note_index,
     get_note_from_index,
     get_roman_numeral,
@@ -182,7 +183,7 @@ def create_substitution_table(base_progression, tonic=None):
     # Generate the table
     table_data = []
     headers = [
-        "Original Mode",
+        "Mode",
         "Borrowed (Relative)",
         f"Degrees ({' '.join(original_numerals)})",
         "Substitution",
@@ -193,8 +194,8 @@ def create_substitution_table(base_progression, tonic=None):
         [
             f"{original_mode} (Original)",
             f"{get_note_from_index(relative_tonic_orig_idx)} Major",
-            " - ".join(chords_to_substitute),
-            " - ".join(base_progression),
+            format_chords_for_table(chords_to_substitute),
+            format_chords_for_table(base_progression),
         ]
     )
 
@@ -218,8 +219,8 @@ def create_substitution_table(base_progression, tonic=None):
         row = [
             mode_name,
             f"{get_note_from_index(relative_tonic_index)} Major",
-            " - ".join(borrowed_chords),
-            new_progression,
+            format_chords_for_table(borrowed_chords),
+            format_chords_for_table(new_progression.split(" - ")),
         ]
         table_data.append(row)
 
